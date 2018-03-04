@@ -1,0 +1,17 @@
+development:
+  clients:
+    default:
+      # A session can have any number of hosts. Usually 1 for a single
+      # server setup, and at least 3 for a replica set. Hosts must be
+      # an array of host:port pairs. This session is single server.
+      hosts:
+        - localhost:27017
+      # Define the default database name.
+      database: simple_api
+
+production:
+  clients:
+    default:
+      # Production MONGO_URI is set here as there is a new configuration in Heroku
+      # that doesn't user environment variables during app initialization
+      uri: "mongodb://heroku_shnr7mc6:rimiom4nejqjcharcpck71trsi@ds155288.mlab.com:55288/heroku_shnr7mc6"

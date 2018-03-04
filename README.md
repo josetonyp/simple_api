@@ -31,7 +31,13 @@ WIP
 
 ## Deployment
 
-WIP
+This application is deployed on a sandbox on heroku free tier. To deploy to this application ask for permission and run:
+
+```
+git push heroku master
+```
+
+You can visit the working app at [https://young-retreat-51574.herokuapp.com/api/xyz](https://young-retreat-51574.herokuapp.com/api/xyz)
 
 ## License
 
