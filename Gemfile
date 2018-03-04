@@ -13,4 +13,5 @@ gem 'awesome_print'
 group :test do
   gem "rspec"
   gem "rack-test"
+  gem "faker"
 end
