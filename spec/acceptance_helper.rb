@@ -11,7 +11,7 @@ RSpec.configure do |config|
     SimpleApi
   end
 
-  before(:each) do
+  config.before(:each) do
     Contract.destroy_all
     User.destroy_all
   end

@@ -30,6 +30,22 @@ class Contract
   field :starts_on, type: DateTime
   field :ends_on, type: DateTime
 
+  belongs_to :user
+
+  validates :vendor, presence: {message: "Vendor should not be empty", allow_blank: false }
+  validates :starts_on, presence: {message: "Starts On should not be empty", allow_blank: false }
+  validates :ends_on, presence: {message: "Ends On should not be empty", allow_blank: false }
+  validate :starts_and_ends_dates
+
+  protected
+
+  def starts_and_ends_dates
+    if self.ends_on.present? && self.starts_on.present? && self.ends_on < self.starts_on
+      errors.add(:starts_on, "Ends on should be greater than Starts on")
+      errors.add(:ends_on, "Ends on should be greater than Starts on")
+    end
+  end
+
   include ModelHelpers
 end
 
@@ -39,6 +55,8 @@ class User
   field :email, type: String
   field :password, type: String
   field :api_token, type: String
+
+  has_many :contracts
 
   before_create :create_api_token
 
@@ -61,8 +79,47 @@ class SimpleApi < Sinatra::Base
 
   namespace '/api' do
     get '/contracts' do
+      authenticate!
+
       content_type :json
       Contract.all.to_json
+    end
+
+    get '/contracts/:id' do
+      authenticate!
+
+      content_type :json
+      begin
+        Contract.where(user: @user).find(params["id"]).to_json
+      rescue Exception => e
+        halt 404, {errors: "Contract not found"}.to_json
+      end
+    end
+
+    delete '/contracts/:id' do
+      authenticate!
+
+      content_type :json
+      begin
+        Contract.where(user: @user).find(params["id"]).destroy
+        {status: :ok}.to_json
+      rescue Exception => e
+        halt 404, {errors: "Contract not found"}.to_json
+      end
+    end
+
+    post '/contracts' do
+      authenticate!
+
+      content_type :json
+      contract = Contract.new(params["contract"])
+      contract.user = @user
+
+      if contract.valid? && contract.save!
+        contract.to_json
+      else
+        halt 422, {errors: contract.error_messages }.to_json
+      end
     end
 
     post '/users' do
@@ -74,5 +131,11 @@ class SimpleApi < Sinatra::Base
         halt 422, {errors: user.error_messages }.to_json
       end
     end
+
+    def authenticate!
+      halt 403 if User.where(api_token: request.env["HTTP_USER_TOKEN"]).none?
+      @user = User.where(api_token: request.env["HTTP_USER_TOKEN"]).first
+    end
+
   end
 end
