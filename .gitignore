@@ -1,0 +1,8 @@
+data*
+log
+.ruby-*
+.bundle
+traductor.sublime*
+backup
+node_modules
+tmp
