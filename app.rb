@@ -3,10 +3,12 @@
 
 # myapp.rb
 require 'sinatra'
+require 'sinatra/base'
 require 'sinatra/namespace'
 require 'mongoid'
 require 'pry'
 require 'pry-doc'
+require 'securerandom'
 
 configure do
   enable :sessions, :dump_errors
@@ -29,11 +31,28 @@ class User
   field :password, type: String
   field :api_token, type: String
 
+  before_create :create_api_token
+
+  private
+
+  def create_api_token
+    self.api_token = SecureRandom.hex
+  end
 end
 
-namespace '/api' do
-  get '/contracts' do
-    content_type :json
-    Contract.all.to_json
+class SimpleApi < Sinatra::Base
+  register Sinatra::Namespace
+
+  namespace '/api' do
+    get '/contracts' do
+      content_type :json
+      Contract.all.to_json
+    end
+
+    post '/users' do
+      content_type :json
+      user = User.create(params["user"])
+      user.to_json
+    end
   end
 end

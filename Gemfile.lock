@@ -13,6 +13,7 @@ GEM
     bson (4.3.0)
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
+    diff-lcs (1.2.5)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     json (2.1.0)
@@ -35,7 +36,22 @@ GEM
     rack (2.0.4)
     rack-protection (2.0.1)
       rack
+    rack-test (0.7.0)
+      rack (>= 1.0, < 3)
     raindrops (0.19.0)
+    rspec (3.4.0)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
+    rspec-core (3.4.4)
+      rspec-support (~> 3.4.0)
+    rspec-expectations (3.4.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-mocks (3.4.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-support (3.4.1)
     sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -66,6 +82,8 @@ DEPENDENCIES
   mongoid
   pry
   pry-doc
+  rack-test
+  rspec
   sinatra
   sinatra-contrib
   unicorn

@@ -9,3 +9,8 @@ gem 'pry'
 gem 'pry-doc'
 gem 'mongoid'
 gem 'awesome_print'
+
+group :test do
+  gem "rspec"
+  gem "rack-test"
+end

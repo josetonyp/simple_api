@@ -2,9 +2,6 @@
 
 Simple API that handles users and contract and works as sandbox for Sinatra and MondoDB projects.
 
-## Getting Started
-
-This
 ### Prerequisites
 
 You will need to have Mongo DB install in local in order to run this project for development purposes. Please follow the following [installation instruccion.](https://docs.mongodb.com/manual/installation/)
@@ -24,10 +21,14 @@ bundle install
 ```
 
 
-
 ## Running the tests
 
-WIP
+Tests are developed with Rspec and Rack::Test, to execute test run:
+
+```
+bundle exec rspec
+```
+
 
 ## Deployment
 
