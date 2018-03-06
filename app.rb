@@ -143,4 +143,5 @@ class SimpleApi < Sinatra::Base
     end
 
   end
+  run!
 end
