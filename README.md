@@ -29,6 +29,11 @@ Tests are developed with Rspec and Rack::Test, to execute test run:
 bundle exec rspec
 ```
 
+There is an script on Bin folder to test deployed app to production. To execute this script run:
+
+```
+ruby ./bin/http_tests.rb
+```
 
 ## Deployment
 
