@@ -20,6 +20,13 @@ bundle install
 . ./bin/.aliases
 ```
 
+After including this shell helpers you can use:
+
+```
+console   # Enter in pry console with the app
+db        # Run mongo db in local
+server    # start Sinatra server
+```
 
 ## Running the tests
 
