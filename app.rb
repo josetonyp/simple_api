@@ -112,7 +112,7 @@ class SimpleApi < Sinatra::Base
       authenticate!
 
       content_type :json
-      contract = Contract.new(params["contract"])
+      contract = Contract.new(json_params["contract"])
       contract.user = @user
 
       if contract.valid? && contract.save!
@@ -124,12 +124,17 @@ class SimpleApi < Sinatra::Base
 
     post '/users' do
       content_type :json
-      user = User.new(params["user"])
+
+      user = User.new(json_params["user"])
       if user.valid? && user.save!
         user.to_json
       else
         halt 422, {errors: user.error_messages }.to_json
       end
+    end
+
+    def json_params
+      JSON.parse(request.body.read)
     end
 
     def authenticate!

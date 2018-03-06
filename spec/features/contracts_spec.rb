@@ -21,6 +21,10 @@ describe "Contracts Api" do
     Contract.create({vendor: Faker::Company.name, starts_on: DateTime.now, ends_on: DateTime.now + 1.year}.merge(user: random_user))
   end
 
+  before(:each) do
+    header "Content-Type", 'application/json'
+  end
+
   context "Create Contract" do
     before(:each) do
       header "User-Token", user.api_token
@@ -28,7 +32,7 @@ describe "Contracts Api" do
 
     it 'redirect on invalid user token' do
       header "User-Token", "!"
-      post "/api/contracts", {contract: contract_attributes}
+      post "/api/contracts", {contract: contract_attributes}.to_json
       expect(last_response.status).to eq(403)
     end
 
@@ -37,7 +41,7 @@ describe "Contracts Api" do
     # Then​ a contract should be created
     it "creates a valid contract" do
       expect{
-        post "/api/contracts", {contract: contract_attributes}
+        post "/api/contracts", {contract: contract_attributes}.to_json
       }.to change(Contract, :count).by(1)
 
       expect(JSON.parse(last_response.body)["vendor"]).to eq(contract_attributes[:vendor])
@@ -49,7 +53,7 @@ describe "Contracts Api" do
     # Then​ a contract should not be created
     # And​ I the response should include the “Vendor should not be empty” message
     it "validates presence of contract's vendor" do
-      post "/api/contracts", {contracts: {vendor: ""}}
+      post "/api/contracts", {contracts: {vendor: ""}}.to_json
 
       expect(last_response.status).to eq(422)
       expect(JSON.parse(last_response.body)["errors"]["vendor"]).to eq("Vendor should not be empty")
@@ -60,7 +64,7 @@ describe "Contracts Api" do
     # Then​ a contract should not be created
     # And​ the response should include the “Starts on should not be empty” message
     it "validates presence of contract's starts_on" do
-      post "/api/contracts", {contracts: {starts_on: ""}}
+      post "/api/contracts", {contracts: {starts_on: ""}}.to_json
 
       expect(last_response.status).to eq(422)
       expect(JSON.parse(last_response.body)["errors"]["starts_on"]).to eq("Starts On should not be empty")
@@ -71,7 +75,7 @@ describe "Contracts Api" do
     # Then​ a contract should not be created
     # And​ the response should include the “Ends on should not be empty” message
     it "validates presence of contract's ends_on" do
-      post "/api/contracts", {contracts: {ends_on: ""}}
+      post "/api/contracts", {contracts: {ends_on: ""}}.to_json
 
       expect(last_response.status).to eq(422)
       expect(JSON.parse(last_response.body)["errors"]["ends_on"]).to eq("Ends On should not be empty")
@@ -82,7 +86,7 @@ describe "Contracts Api" do
     # Then​ a contract should not be created
     # And​ the response should include the “Ends on should be greater than Starts on” message
     it "validates starts and ends date" do
-      post "/api/contracts", {contract: {ends_on: DateTime.now, starts_on: DateTime.now + 1.year}}
+      post "/api/contracts", {contract: {ends_on: DateTime.now, starts_on: DateTime.now + 1.year}}.to_json
 
       expect(last_response.status).to eq(422)
       expect(JSON.parse(last_response.body)["errors"]["starts_on"]).to eq("Ends on should be greater than Starts on")
